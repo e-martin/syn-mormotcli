@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>syn-mormotcli demo</title>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script type="module">
+      import "@polymer/iron-demo-helpers/demo-pages-shared-styles.js";
+      import "@polymer/iron-demo-helpers/demo-snippet.js";
+      import "../syn-mormotcli.js";
+    </script>
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic syn-mormotcli demo</h3>
+      <demo-snippet>
+        <template>
+          <syn-mormotcli
+              host="localhost"
+              port="8888"
+              ssl="false"
+              user-auth="true"
+              root-model="root"
+              on-login-ok="demoLoginOk"
+              on-login-failed="demoLoginFailed"
+              on-logout-ok="demoLogoutOk"
+              on-logout-failed="demoLogoutFailed"
+              on-ws-open="demoWSOpen"
+              on-ws-close="demoWSClose"
+              on-ws-error="demoWSError"
+              on-ws-message="demoWSMessage"
+          >
+          </syn-mormotcli>
+            <!-- type="text/markdown" is for documentation -->
+            <script type="text/markdown">
+            const element = document.querySelector('syn-mormotcli');
+
+            // changing some properties..
+
+            element.ssl = true;
+            element.rootModel = 'rt';
+
+            // query base url
+            if (element.baseURL = 'https://localhost:8888/') { // give true
+              // ...
+            }
+
+            /***************************
+             / working with requests
+             ***************************/
+
+            // invoking http request from other web services
+            element.httpRequest('https://jsonplaceholder.typicode.com/todos/1',SynMormotcli.GET_HTTP_VERB,null,null).
+            then((data) => {
+              console.log(data); //-> {"userId":1,"id":1,"title":"delectus aut autem","completed":false}
+            }).
+            catch((error) => {
+              console.log(error);
+            });
+
+            /***************************
+             / working mORMot services
+             ***************************/
+
+            // calling an interface based service mORMot
+            element.invokeService('Calculator.Add',{n1: 1, n2: 2}).
+            then((result) => {
+              console.log(result); //-> 3
+            }).
+            catch((error) => {
+              console.log(error.errorText);
+            });
+
+            // calling an method based service mORMot
+            element.invokeService('Timestamp').
+            then((result) => {
+              console.log(result); //-> the timestamp value
+            }).
+            catch((error) => {
+              console.log(error.errorText);
+            });
+
+            /***************************
+            / working with events
+            ***************************/
+
+            // login OK
+            element.addEventListener('demoLoginOk', function(event) {
+              console.log(event.detail); //->
+              // {"result":"59363651+1961...","logonid":1,"logonname":"Admin","logondisplay":"Admin","logongroup":1,"timeout":10,"server":"Project14ServerHttp","version":""}
+            });
+            element.login('Admin', 'synopse');
+
+            // login failed
+            element.addEventListener('demoLoginFailed', function(event) {
+              console.log(event.detail); //-> {"errorCode":400,"errorText":"Bad Request"}
+            });
+            element.login('User', 'synops');
+
+            // logout OK
+            element.addEventListener('demoLogoutOk', function(event) {
+              console.log(element.isLogged()); //-> false
+            });
+            element.logout();
+
+            // logout failed
+            element.addEventListener('demoLogoutFailed', function(event) {
+              console.log(event.detail);
+            });
+            element.logout();
+
+            /**
+             * Websocket events
+             */
+
+            // websocket open
+            element.addEventListener('demoWSOpen', function(event) {
+              console.log(event.detail);
+            });
+
+            // websocket close
+            element.addEventListener('demoWSClose', function(event) {
+              console.log(event.detail);
+            });
+
+            // websocket error
+            element.addEventListener('demoWSError', function(event) {
+              console.log(event.detail);
+            });
+
+            // websocket message
+            element.addEventListener('demoWSMessage', function(event) {
+              console.log(event.detail);
+            });
+
+            /***************************
+            / working with an ORM table
+            ***************************/
+
+            // select all records
+            element.sqlRecordSelect('AuthUser','*','').
+            then((result) => {
+              console.log(result); //->
+              /*
+              [
+              {"RowID":1,"LogonName":"Admin","DisplayName":"Admin","PasswordHashHexa":"67aee...","GroupRights":1},
+              {"RowID":2,"LogonName":"Supervisor","DisplayName":"Supervisor","PasswordHashHexa":"67aee...","GroupRights":2},
+              {"RowID":3,"LogonName":"User","DisplayName":"User","PasswordHashHexa":"67aee...","GroupRights":3}
+              ]
+              */
+            });
+
+            // select one record
+            element.sqlRecordSelect('AuthUser','*','ID=3').
+            then((result) => {
+              console.log(result); //->
+              // [{"RowID":3,"LogonName":"User","DisplayName":"User","PasswordHashHexa":"67aee...","GroupRights":3}]
+            });
+
+            // select with no record
+            element.sqlRecordSelect('AuthUser','*','ID=0').
+            then((result) => {
+              console.log(result); //->
+              // {"fieldCount":5,"values":["RowID","LogonName","DisplayName","PasswordHashHexa","GroupRights"],"rowCount":0}
+            });
+
+            // update record
+            element.sqlRecordUpdate('AuthUser',3,{DisplayName: 'User1'}).
+            then((result) => {
+              console.log(result); //->'' (if not return data is enabled in mORMot server
+            }).
+            catch((error) => {
+              console.log(error); //-> {"errorCode":400,"errorText":"Bad Request"}
+            });
+
+            // update record with where clause
+            element.sqlRecordUpdateWhere('AuthUser',{LogonName: '"UserNew'+sDate+'"'},{DisplayName:'"UserNewWhere"'}).
+            then((result) => {
+              console.log(result); //->'' (if not return data is enabled in mORMot server
+            }).
+            catch((error) => {
+              console.log(error); //-> {"errorCode":400,"errorText":"Bad Request"}
+            });
+
+            // insert record
+            element.sqlRecordInsert('AuthUser',{LogonName:'UserNew'+sTime,DisplayName:'UserNew'+sTime,Password: 'user1'}).
+            then((result) => {
+              console.log(result); //-> the new ID
+            }).
+            catch((error) => {
+              console.log(error); //-> {"errorCode":400,"errorText":"Bad Request"}
+            });
+
+            // delete record
+            element.sqlRecordDelete('AuthUser',4).
+            then((result) => {
+              console.log(result); //-> ''
+              done();
+            }).
+            catch((error) => {
+              console.log(error); //-> {"errorCode":400,"errorText":"Bad Request"}
+            });
+
+            // delete with where clause
+            element.sqlRecordDeleteWhere('AuthUser','LogonName='+'"Guest"').
+            then((result) => {
+              console.log(result); //-> ''
+            }).
+            catch((error) => {
+              console.log(error); //-> {"errorCode":400,"errorText":"Bad Request"}
+            });
+            </script>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>

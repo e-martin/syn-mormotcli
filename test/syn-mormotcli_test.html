@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>syn-mormotcli test</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
+
+  </head>
+  <body>
+
+    <test-fixture id="BasicTestFixture">
+      <template>
+        <syn-mormotcli
+          on-login-ok="test-loginok"
+          on-login-failed="test-loginfailed"
+          on-logout-ok="test-logoutok"
+          on-logout-failed="test-logoutfailed"
+        >
+        </syn-mormotcli>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="ChangedPropertyTestFixture">
+      <template>
+        <syn-mormotcli
+                host="127.0.0.1"
+                port="888"
+                ssl="true"
+                max-auth-retry="2"
+                root-model="rt"
+                proxy-name="prxName"
+                proxy-bypass="prxByPass"
+        >
+        </syn-mormotcli>
+      </template>
+    </test-fixture>
+
+    <script type="module">
+      import SynMormotcli from "../syn-mormotcli";
+
+      suite('syn-mormotcli', () => {
+        let previousElement,
+            iNewID;
+
+        test('instantiating the element with default properties works', () => {
+          const element = fixture('BasicTestFixture');
+          assert.equal(element.host, 'localhost');
+          assert.equal(element.port, '8888');
+          assert.equal(element.ssl, false);
+          assert.equal(element.userAuth, true);
+          assert.equal(element.rootModel, 'root');
+          assert.equal(element.baseURL,'http://localhost:8888/')
+        });
+
+        test('instantiating the element with changed properties works', () => {
+          // Create a test fixture
+          const element = fixture('ChangedPropertyTestFixture');
+          assert.equal(element.host, '127.0.0.1');
+          assert.equal(element.port, '888');
+          assert.equal(element.ssl, true);
+          assert.equal(!element.userAuth, false);
+          assert.equal(element.rootModel, 'rt');
+          assert.equal(element.baseURL,'https://127.0.0.1:888/')
+        });
+
+        test('methods on the element works', () => {
+            // Create a test fixture
+            const element = fixture('BasicTestFixture');
+            assert.equal(element.sha256hash('salt'+'synopse'),
+                '67aeea294e1cb515236fd7829c55ec820ef888e8e221814d24d83b3dc4d825dd',
+                'No coincide usando syn-mormotcli.js');
+          });
+
+        test('HTTP request on the element works', (done) => {
+          // Create a test fixture
+          const element = fixture('BasicTestFixture');
+          element.httpRequest('https://jsonplaceholder.typicode.com/todos/1',SynMormotcli.GET_HTTP_VERB,null,null).
+            then((data) => {
+              assert.equal(JSON.stringify(data),
+                '{"userId":1,"id":1,"title":"delectus aut autem","completed":false}');
+              done();
+            }).
+            catch((error) => {
+              console.log(error);
+            });
+        });
+
+        test('mORMot request on the element works', (done) => {
+          // Create a test fixture
+          const element = fixture('BasicTestFixture');
+          element.mORMotRequest('timestamp', SynMormotcli.POST_HTTP_VERB, null, null).then((data) => {
+            assert.notEqual(data, '');
+            done();
+          });
+        });
+
+        test('event login ok on the element works', (done) => {
+          // Create a test fixture
+          const element = fixture('BasicTestFixture');
+          element.addEventListener('test-loginok', function(event) {
+            assert.equal(typeof event.detail === 'object', true, 'login failed: response is not an object');
+            assert.equal(element.isLogged(), true, 'login failed: empty session id');
+            let sURLSigned = element.signURL('http://127.0.0.1:8888/root/');
+            assert.equal(sURLSigned.substring(0,sURLSigned.indexOf('=')+1),'http://127.0.0.1:8888/root?session_signature=',
+              'URL not signed');
+            previousElement = element;
+            done();
+          });
+          element.login('Admin', 'synopse');
+        });
+
+        test('invoke service Calculator.Add on ok', (done) => {
+          const element = previousElement;
+          element.invokeService('Calculator.Add',{n1: 1, n2: 2}).
+            then((result) => {
+              assert.equal(result[0],3,'the sum does not give 3');
+              assert.notEqual(result[0],0,'the sum should not give 0');
+              done();
+            });
+        });
+
+        test('invoke service Calculator.Add on fail', (done) => {
+          const element = previousElement;
+          element.invokeService('Calculator.Add',{n1: 1, n2: '2'}).
+          catch((error) => {
+            assert.equal(error.status,406,'the result should be error 406');
+            done();
+          });
+        });
+
+        test('invoke service with Timestamp on ok', (done) => {
+          const element = previousElement;
+          element.invokeService('Timestamp').
+          then((result) => {
+            assert.notEqual(result,'','the result is empty');
+            done();
+          });
+        });
+
+        test('invoke service with Timestamp on fail', (done) => {
+          const element = previousElement;
+          element.invokeService('Timestam').
+          catch((error) => {
+            assert.equal(error.status,403,'the result should be error 403');
+            done();
+          });
+        });
+
+        test('sql select all on ok', (done) => {
+          const element = previousElement;
+          element.sqlRecordSelect('AuthUser','*','').
+          then((result) => {
+            assert.notEqual(result.length,0,'the result is empty');
+            done();
+          });
+        });
+
+        test('sql select all on fail', (done) => {
+          const element = previousElement;
+          element.sqlRecordSelect('AuthUse','*','').
+          then((result) => {
+            assert.notEqual(result.length,0,'the result is empty');
+            done();
+          }).
+          catch((error) => {
+            assert.equal(error.status,400,'should be an error 400');
+            done();
+          });
+        });
+
+        test('sql select record on ok', (done) => {
+          const element = previousElement;
+          element.sqlRecordSelect('AuthUser','*','ID=3').
+          then((result) => {
+            assert.notEqual(result.RowID,3,'the ID is not 3');
+            done();
+          });
+        });
+
+        test('sql select record on fail', (done) => {
+          const element = previousElement;
+          element.sqlRecordSelect('AuthUser','*','ID=0').
+          then((result) => {
+            assert.equal(result.rowCount,0,'the result should be without records');
+            done();
+          });
+        });
+
+        test('sql update record on ok', (done) => {
+          const element = previousElement;
+          element.sqlRecordUpdate('AuthUser',3,{DisplayName: 'User1'}).
+          then((result) => {
+            assert.equal(result,'','the ID = 3 not updated');
+            done();
+          });
+        });
+
+        test('sql update record with bad ID on fail', (done) => {
+          const element = previousElement;
+          element.sqlRecordUpdate('AuthUser',0,{DisplayName: 'User1'}).
+          catch((error) => {
+            assert.equal(error.status,400,'the ID = 0 should be not updated');
+            done();
+          });
+        });
+
+        test('sql insert on ok', (done) => {
+          const element = previousElement;
+          let sTime = new Date().getTime().toString();
+          element.sqlRecordInsert('AuthUser',{LogonName:'UserNew'+sTime,DisplayName:'UserNew'+sTime,Password: 'user1'}).
+          then((result) => {
+            assert.notEqual(result,0,'record not inserted');
+            iNewID = result;
+            done();
+          });
+        });
+
+        test('sql insert on fail', (done) => {
+          const element = previousElement;
+          let sTime = new Date().getTime().toString();
+          element.sqlRecordInsert('AuthUse',{LogonName:'UserNew'+sTime,DisplayName:'UserNew'+sTime,Password: 'user1'}).
+          catch((error) => {
+            assert.equal(error.status,403,'record should be not inserted');
+            done();
+          });
+        });
+
+        test('sql delete last ID on ok', (done) => {
+          const element = previousElement;
+          element.sqlRecordDelete('AuthUser',iNewID).
+          then((result) => {
+            assert.equal(result,'','cannot delete last ID='+iNewID.toString());
+            done();
+          });
+        });
+
+        test('sql insert for test sql delete/update with where on ok', (done) => {
+          const element = previousElement;
+          let dDate = new Date();
+          let sDate = dDate.getFullYear()+'/'+(dDate.getMonth()+1)+'/'+dDate.getDate();
+          element.sqlRecordInsert('AuthUser',{LogonName:'UserNew'+sDate,DisplayName:'UserNew'+sDate,Password: 'user1'}).
+          then((result) => {
+            assert.notEqual(result,0,'record not inserted');
+            iNewID = result;
+            done();
+          });
+        });
+
+        test('sql update with where on ok', (done) => {
+          const element = previousElement;
+          let dDate = new Date();
+          let sDate = dDate.getFullYear()+'/'+(dDate.getMonth()+1)+'/'+dDate.getDate();
+          element.sqlRecordUpdateWhere('AuthUser',{LogonName: '"UserNew'+sDate+'"'},{DisplayName:'"UserNewWhere"'}).
+          then((result) => {
+            assert.equal(result,'','cannot update last insert="UserNew'+sDate+'"');
+            done();
+          });
+        });
+
+        test('sql delete with where on ok', (done) => {
+          const element = previousElement;
+          let dDate = new Date();
+          let sDate = dDate.getFullYear()+'/'+(dDate.getMonth()+1)+'/'+dDate.getDate();
+          element.sqlRecordDeleteWhere('AuthUser','LogonName='+'"UserNew"'+sDate).
+          then((result) => {
+            assert.equal(result,'','cannot delete last insert="UserNew"'+sDate);
+            done();
+          });
+        });
+
+        test('event logout on the element works', (done) => {
+          const element = previousElement;
+          element.addEventListener('test-logoutok', function(event) {
+            assert.equal(element.isLogged(), false, 'logout failed');
+            assert.equal(element.signURL('http://127.0.0.1:8888/root/'),'http://127.0.0.1:8888/root/','URL signed');
+            done();
+          });
+          element.logout();
+        });
+
+        test('event login fail on the element works', (done) => {
+          // Create a test fixture
+          const element = fixture('BasicTestFixture');
+          element.addEventListener('test-loginfailed', function(event) {
+            assert.equal(typeof event.detail === 'object', true, 'not login failed: response is not an object');
+            assert.equal(event.detail.status === 403, true, 'not login failed: status error code is not 403');
+            done();
+          });
+          element.login('User', 'synops');
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

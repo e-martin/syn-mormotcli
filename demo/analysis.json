@@ -1,0 +1,2520 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "`syn-mormotcli`\nis a client web component for mORMot HTTP Server (http://synopse.info).\nThis component allows to connect to a REST/JSON server of mORMot and allows to perform specific operations on it.\nHow to be:\n\n  * Make a login with default authentification.\n  * Do CRUD operations on ORM tables.\n  * Invoke services based on interfaces or methods.",
+      "summary": "",
+      "path": "syn-mormotcli.js",
+      "properties": [
+        {
+          "name": "host",
+          "type": "string",
+          "description": "Server host.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 37,
+              "column": 6
+            },
+            "end": {
+              "line": 40,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"localhost\""
+        },
+        {
+          "name": "port",
+          "type": "string",
+          "description": "Server port.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 45,
+              "column": 6
+            },
+            "end": {
+              "line": 48,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"8888\""
+        },
+        {
+          "name": "ssl",
+          "type": "boolean",
+          "description": "Connect to the server with https://.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 53,
+              "column": 6
+            },
+            "end": {
+              "line": 56,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "userAuth",
+          "type": "boolean",
+          "description": "Use user authentification (require login with user name and password).",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 61,
+              "column": 6
+            },
+            "end": {
+              "line": 64,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "true"
+        },
+        {
+          "name": "rootModel",
+          "type": "string",
+          "description": "Service root.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 69,
+              "column": 6
+            },
+            "end": {
+              "line": 72,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"root\""
+        },
+        {
+          "name": "baseURL",
+          "type": "string",
+          "description": "Compose the URL based on sll, host and port properties.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 77,
+              "column": 6
+            },
+            "end": {
+              "line": 80,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true,
+              "attributeType": "String"
+            }
+          }
+        },
+        {
+          "name": "wsHost",
+          "type": "string",
+          "description": "Websocket server host. If set \"=\" value, take the value from **host** property.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 85,
+              "column": 6
+            },
+            "end": {
+              "line": 88,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "wsPort",
+          "type": "string",
+          "description": "Websocket server port. Cannot be the same value as **port** property.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 93,
+              "column": 6
+            },
+            "end": {
+              "line": 96,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "wsRoot",
+          "type": "string",
+          "description": "Websocket root. If set \"=\" value, take the value from **host** property.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 101,
+              "column": 6
+            },
+            "end": {
+              "line": 104,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "wsTransmissionKey",
+          "type": "string",
+          "description": "Websocket transmission key.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 109,
+              "column": 6
+            },
+            "end": {
+              "line": 112,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "onLoginFailed",
+          "type": "string",
+          "description": "Name of the event to be fired defined in **on-login-failed**.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 119,
+              "column": 6
+            },
+            "end": {
+              "line": 122,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "onLoginOk",
+          "type": "string",
+          "description": "Name of the event to be fired defined in **on-login-ok**.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 128,
+              "column": 6
+            },
+            "end": {
+              "line": 131,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "onLogoutFailed",
+          "type": "string",
+          "description": "Name of the event to be fired defined in **on-logout-failed**.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 137,
+              "column": 6
+            },
+            "end": {
+              "line": 140,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "onLogoutOk",
+          "type": "string",
+          "description": "Name of the event to be fired defined in **on-logout-ok**.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 146,
+              "column": 6
+            },
+            "end": {
+              "line": 149,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "onWsOpen",
+          "type": "string",
+          "description": "Name of the event to be fired defined in **on-ws-open**.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 155,
+              "column": 6
+            },
+            "end": {
+              "line": 158,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "onWsMessage",
+          "type": "string",
+          "description": "Name of the event to be fired defined in **on-ws-message**.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 164,
+              "column": 6
+            },
+            "end": {
+              "line": 167,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "onWsError",
+          "type": "string",
+          "description": "Name of the event to be fired defined in **on-ws-error**.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 173,
+              "column": 6
+            },
+            "end": {
+              "line": 176,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "onWsClose",
+          "type": "string",
+          "description": "Name of the event to be fired defined in **on-ws-close**.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 182,
+              "column": 6
+            },
+            "end": {
+              "line": 185,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          },
+          "defaultValue": "\"\""
+        }
+      ],
+      "methods": [
+        {
+          "name": "Utf8Encode",
+          "description": "Encode a string to UTF8.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 153,
+              "column": 4
+            },
+            "end": {
+              "line": 167,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "strUni",
+              "type": "string",
+              "description": "String to encode."
+            }
+          ],
+          "return": {
+            "type": "*",
+            "desc": "Return the string in UTF8."
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "Crc32Add",
+          "description": "CRC32 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 175,
+              "column": 4
+            },
+            "end": {
+              "line": 177,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "crc"
+            },
+            {
+              "name": "c"
+            }
+          ],
+          "return": {
+            "type": "number"
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "crc32",
+          "description": "CRC32 routine.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 185,
+              "column": 4
+            },
+            "end": {
+              "line": 206,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "str",
+              "type": "sring",
+              "description": "String to apply the CRC32 algorithm."
+            },
+            {
+              "name": "crc",
+              "description": "Initial CRC or none."
+            }
+          ],
+          "return": {
+            "type": "number",
+            "desc": "CRC32 value."
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "sha256hash",
+          "description": "Hash string using SHA256",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 216,
+              "column": 4
+            },
+            "end": {
+              "line": 298,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "msg",
+              "type": "string",
+              "description": "Message to be hashed"
+            },
+            {
+              "name": "utf8encode",
+              "type": "boolean",
+              "description": "Encode in UTF8 ?"
+            }
+          ],
+          "return": {
+            "type": "*"
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "Sha256Ch",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 307,
+              "column": 4
+            },
+            "end": {
+              "line": 309,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            },
+            {
+              "name": "y"
+            },
+            {
+              "name": "z"
+            }
+          ],
+          "return": {
+            "type": "number"
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "httpRequest",
+          "description": "Makes an HTTP request",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 197,
+              "column": 2
+            },
+            "end": {
+              "line": 218,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "sURL",
+              "type": "string",
+              "description": "The complete URL."
+            },
+            {
+              "name": "sVerb",
+              "type": "string",
+              "description": "Method action"
+            },
+            {
+              "name": "oHeaders",
+              "type": "Object",
+              "description": "HTTP headers, ie: {Header-Name: \"header value\"}"
+            },
+            {
+              "name": "oBody",
+              "type": "Object",
+              "description": "Body content in JSON format, ie: {fieldName: \"fieldValue\"}."
+            }
+          ],
+          "return": {
+            "type": "Promise.<Response>"
+          }
+        },
+        {
+          "name": "invokeService",
+          "description": "Invoke mORMot service.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 227,
+              "column": 2
+            },
+            "end": {
+              "line": 239,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "sEndPoint",
+              "type": "string",
+              "description": "Method name (ie: Timestamp) or service ie: Service.Method"
+            },
+            {
+              "name": "oParams",
+              "type": "Object",
+              "description": "JSON object, ie: {ParamName: \"ParamValue\", ...}"
+            },
+            {
+              "name": "oHeaders",
+              "type": "Object",
+              "description": "HTTP headers, ie: {Header-Name: \"header value\"}"
+            }
+          ],
+          "return": {
+            "type": "Promise.<(Data | Error)>"
+          }
+        },
+        {
+          "name": "isLogged",
+          "description": "Is true when the login is successful.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 245,
+              "column": 2
+            },
+            "end": {
+              "line": 247,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "login",
+          "description": "Login to mORMot server",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 255,
+              "column": 2
+            },
+            "end": {
+              "line": 325,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "aUserName",
+              "type": "string"
+            },
+            {
+              "name": "aPassword",
+              "type": "string"
+            },
+            {
+              "name": "aIsHashed",
+              "type": "boolean",
+              "description": "Is the password hashed ?"
+            }
+          ]
+        },
+        {
+          "name": "logout",
+          "description": "Logout from the mORMot server",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 331,
+              "column": 2
+            },
+            "end": {
+              "line": 348,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "Promise.<null>"
+          }
+        },
+        {
+          "name": "mORMotRequest",
+          "description": "mORMot HTTP request: interface service, method service, ORM",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 359,
+              "column": 2
+            },
+            "end": {
+              "line": 377,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "sURL",
+              "type": "string",
+              "description": "Interface service, method service, ORM CRUD."
+            },
+            {
+              "name": "sVerb",
+              "type": "string",
+              "description": "GET,POST,PUT,DELETE."
+            },
+            {
+              "name": "oHeaders",
+              "type": "Object",
+              "description": "Headers declaration in a JSON object."
+            },
+            {
+              "name": "oParamsOrBody",
+              "type": "Object",
+              "description": "Parameters declaration (GET method) or body in a JSON object."
+            },
+            {
+              "name": "bSign",
+              "type": "boolean",
+              "description": "Indicates if the URL is signed."
+            }
+          ],
+          "return": {
+            "type": "Promise.<Response>",
+            "desc": "Return a promise."
+          }
+        },
+        {
+          "name": "setSalt",
+          "description": "New salt for hashing password",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 384,
+              "column": 2
+            },
+            "end": {
+              "line": 387,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "aSalt",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "string",
+            "desc": "return the new salt"
+          }
+        },
+        {
+          "name": "signURL",
+          "description": "Sign the URL.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 394,
+              "column": 2
+            },
+            "end": {
+              "line": 418,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "url",
+              "type": "string",
+              "description": "URL to sign."
+            }
+          ],
+          "return": {
+            "type": "string",
+            "desc": "The URL signed with the parameter added session_signature=..."
+          }
+        },
+        {
+          "name": "sqlRecordDelete",
+          "description": "Delete a record on a table.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 426,
+              "column": 2
+            },
+            "end": {
+              "line": 438,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "sTable",
+              "type": "string",
+              "description": "Table from which a record will be deleted."
+            },
+            {
+              "name": "iID",
+              "type": "number",
+              "description": "Record ID to be deleted."
+            }
+          ],
+          "return": {
+            "type": "Promise.<Response>"
+          }
+        },
+        {
+          "name": "sqlRecordDeleteWhere",
+          "description": "Delete a record on a table with a where clause.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 446,
+              "column": 2
+            },
+            "end": {
+              "line": 458,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "sTable",
+              "type": "string",
+              "description": "Table from which a record will be deleted."
+            },
+            {
+              "name": "sWhere",
+              "type": "string",
+              "description": "Where condition."
+            }
+          ],
+          "return": {
+            "type": "Promise.<Response>"
+          }
+        },
+        {
+          "name": "sqlRecordInsert",
+          "description": "Insert a record on a table.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 466,
+              "column": 2
+            },
+            "end": {
+              "line": 480,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "sTable",
+              "type": "string",
+              "description": "Table from which a record will be inserted."
+            },
+            {
+              "name": "oData",
+              "type": "object",
+              "description": "Data to be inserted."
+            }
+          ],
+          "return": {
+            "type": "Promise.<number>"
+          }
+        },
+        {
+          "name": "sqlRecordSelect",
+          "description": "Retrieve records from a table.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 489,
+              "column": 2
+            },
+            "end": {
+              "line": 508,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "sTable",
+              "type": "string",
+              "description": "Table from which records will be retrieved."
+            },
+            {
+              "name": "sFields",
+              "type": "string",
+              "description": "Fields to retrieve."
+            },
+            {
+              "name": "sWhere",
+              "type": "string",
+              "description": "Where condition."
+            }
+          ],
+          "return": {
+            "type": "Promise.<Response>"
+          }
+        },
+        {
+          "name": "sqlRecordUpdate",
+          "description": "Update a record on a table.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 517,
+              "column": 2
+            },
+            "end": {
+              "line": 529,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "sTable",
+              "type": "string",
+              "description": "Table from which a record will be updated."
+            },
+            {
+              "name": "iID",
+              "type": "number",
+              "description": "Record ID to be updated."
+            },
+            {
+              "name": "oData",
+              "type": "object",
+              "description": "Data to be updated."
+            }
+          ],
+          "return": {
+            "type": "Promise.<Response>"
+          }
+        },
+        {
+          "name": "sqlRecordUpdateWhere",
+          "description": "Update a record on a table with a where clause.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 538,
+              "column": 2
+            },
+            "end": {
+              "line": 550,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "sTable",
+              "type": "string",
+              "description": "Table from which a record will be deleted."
+            },
+            {
+              "name": "oWhere"
+            },
+            {
+              "name": "oData",
+              "type": "object",
+              "description": "Data to be updated."
+            }
+          ],
+          "return": {
+            "type": "Promise.<Response>"
+          }
+        },
+        {
+          "name": "_handleOnLoginFailed",
+          "description": "Fire an event with the name defined here.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 560,
+              "column": 2
+            },
+            "end": {
+              "line": 564,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e",
+              "type": "object",
+              "description": "Event with \"detail\" property which has specific information about it."
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_handleOnLoginOk",
+          "description": "Fire an event with the name defined here.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 572,
+              "column": 2
+            },
+            "end": {
+              "line": 576,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e",
+              "type": "object",
+              "description": "Event with \"detail\" property which has specific information about it."
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_handleOnLogoutFailed",
+          "description": "Fire an event with the name defined here.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 584,
+              "column": 2
+            },
+            "end": {
+              "line": 588,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e",
+              "type": "object",
+              "description": "Event with \"detail\" property which has specific information about it."
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_handleOnLogoutOk",
+          "description": "Fire an event with the name defined here.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 596,
+              "column": 2
+            },
+            "end": {
+              "line": 600,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e",
+              "type": "object",
+              "description": "Event with \"detail\" property which has specific information about it."
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_handleOnWSClose",
+          "description": "Fire an event with the name defined here.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 608,
+              "column": 2
+            },
+            "end": {
+              "line": 612,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e",
+              "type": "object",
+              "description": "Event with \"detail\" property which has specific information about it."
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_handleOnWSError",
+          "description": "Fire an event with the name defined here.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 620,
+              "column": 2
+            },
+            "end": {
+              "line": 624,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e",
+              "type": "object",
+              "description": "Event with \"detail\" property which has specific information about it."
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_handleOnWSMessage",
+          "description": "Fire an event with the name defined here.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 632,
+              "column": 2
+            },
+            "end": {
+              "line": 636,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e",
+              "type": "object",
+              "description": "Event with \"detail\" property which has specific information about it."
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_handleOnWSOpen",
+          "description": "Fire an event with the name defined here.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 644,
+              "column": 2
+            },
+            "end": {
+              "line": 648,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e",
+              "type": "object",
+              "description": "Event with \"detail\" property which has specific information about it."
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_handleResponse",
+          "description": "Handle promise response.\nAnalyze the content-type header to determine the type response.",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 657,
+              "column": 2
+            },
+            "end": {
+              "line": 669,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "response",
+              "type": "object",
+              "description": "Promise response to be parsed."
+            }
+          ],
+          "return": {
+            "type": "object",
+            "desc": "Return the response or error."
+          }
+        },
+        {
+          "name": "_handleJSONResponse",
+          "description": "Handle JSON response",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 677,
+              "column": 2
+            },
+            "end": {
+              "line": 689,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "response",
+              "description": "Response to be handled."
+            }
+          ],
+          "return": {
+            "type": "Promise.<T>",
+            "desc": "Return the promise with JSON data, or promise error."
+          }
+        },
+        {
+          "name": "_handleTextResponse",
+          "description": "Handle TEXT response",
+          "privacy": "private",
+          "sourceRange": {
+            "start": {
+              "line": 697,
+              "column": 2
+            },
+            "end": {
+              "line": 710,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "response",
+              "description": "Response to be handled."
+            }
+          ],
+          "return": {
+            "type": "Promise.<T>",
+            "desc": "Return the promise with TEXT data, or promise error."
+          }
+        },
+        {
+          "name": "computeBaseURL",
+          "description": "Computed property",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 720,
+              "column": 2
+            },
+            "end": {
+              "line": 726,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "ssl",
+              "type": "boolean",
+              "description": "use SSL ?"
+            },
+            {
+              "name": "host",
+              "type": "string",
+              "description": "server IP or host name"
+            },
+            {
+              "name": "port",
+              "type": "string",
+              "description": "server port"
+            }
+          ],
+          "return": {
+            "type": "string",
+            "desc": "return the base URL: http://host:port/rootModel/ or https://host:port/rootModel"
+          }
+        },
+        {
+          "name": "connectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 783,
+              "column": 2
+            },
+            "end": {
+              "line": 785,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "disconnectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 787,
+              "column": 2
+            },
+            "end": {
+              "line": 789,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "ready",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 791,
+              "column": 2
+            },
+            "end": {
+              "line": 794,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        }
+      ],
+      "staticMethods": [
+        {
+          "name": "JsonToUpdateSet",
+          "description": "Convert a JSON object to record update definition.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 70,
+              "column": 4
+            },
+            "end": {
+              "line": 78,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "oJson",
+              "type": "object",
+              "description": "JSON object to be converted."
+            }
+          ],
+          "return": {
+            "type": "string",
+            "desc": "Return the setname=...,set=... URL parameter for mORMot request."
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "JsonToUpdateWhere",
+          "description": "Convert a JSON object to record update condition.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 85,
+              "column": 4
+            },
+            "end": {
+              "line": 93,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "oJson",
+              "type": "object",
+              "description": "JSON object to be converted."
+            }
+          ],
+          "return": {
+            "type": "string",
+            "desc": "Return the wherename=...,where=... URL parameter for mORMot request."
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "JsonToUrl",
+          "description": "Convert JSON object to URL encoded parameters.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 100,
+              "column": 4
+            },
+            "end": {
+              "line": 107,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "oJson",
+              "type": "object",
+              "description": "JSON object to be converted."
+            }
+          ],
+          "return": {
+            "type": "string",
+            "desc": "Return the field JSON=value JSON encode URL parameters."
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "mORMotNowTime",
+          "description": "Return a date and time in mORMot format.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 113,
+              "column": 4
+            },
+            "end": {
+              "line": 146,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "number"
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "Sha256Maj",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 318,
+              "column": 4
+            },
+            "end": {
+              "line": 320,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            },
+            {
+              "name": "y"
+            },
+            {
+              "name": "z"
+            }
+          ],
+          "return": {
+            "type": "number"
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "Sha256Sigma0",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 327,
+              "column": 4
+            },
+            "end": {
+              "line": 329,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            }
+          ],
+          "return": {
+            "type": "number"
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "Sha256Sigma1",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 336,
+              "column": 4
+            },
+            "end": {
+              "line": 338,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            }
+          ],
+          "return": {
+            "type": "number"
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "Sha256sigma0",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 345,
+              "column": 4
+            },
+            "end": {
+              "line": 347,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            }
+          ],
+          "return": {
+            "type": "number"
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "Sha256sigma1",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 354,
+              "column": 4
+            },
+            "end": {
+              "line": 356,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            }
+          ],
+          "return": {
+            "type": "number"
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "Sha256toHexStr",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 363,
+              "column": 4
+            },
+            "end": {
+              "line": 372,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "n"
+            }
+          ],
+          "return": {
+            "type": "string"
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        },
+        {
+          "name": "Sha256ROTR",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "file": "syn-commons.js",
+            "start": {
+              "line": 380,
+              "column": 4
+            },
+            "end": {
+              "line": 382,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "n"
+            },
+            {
+              "name": "x"
+            }
+          ],
+          "return": {
+            "type": "number"
+          },
+          "inheritedFrom": "SynCommonsMixin"
+        }
+      ],
+      "demos": [
+        {
+          "url": "demo/index.html",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 19,
+          "column": 7
+        },
+        "end": {
+          "line": 795,
+          "column": 1
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "name": "SynMormotcli",
+      "attributes": [
+        {
+          "name": "host",
+          "description": "Server host.",
+          "sourceRange": {
+            "start": {
+              "line": 37,
+              "column": 6
+            },
+            "end": {
+              "line": 40,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "port",
+          "description": "Server port.",
+          "sourceRange": {
+            "start": {
+              "line": 45,
+              "column": 6
+            },
+            "end": {
+              "line": 48,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "ssl",
+          "description": "Connect to the server with https://.",
+          "sourceRange": {
+            "start": {
+              "line": 53,
+              "column": 6
+            },
+            "end": {
+              "line": 56,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "user-auth",
+          "description": "Use user authentification (require login with user name and password).",
+          "sourceRange": {
+            "start": {
+              "line": 61,
+              "column": 6
+            },
+            "end": {
+              "line": 64,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "root-model",
+          "description": "Service root.",
+          "sourceRange": {
+            "start": {
+              "line": 69,
+              "column": 6
+            },
+            "end": {
+              "line": 72,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "base-u-r-l",
+          "description": "Compose the URL based on sll, host and port properties.",
+          "sourceRange": {
+            "start": {
+              "line": 77,
+              "column": 6
+            },
+            "end": {
+              "line": 80,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "ws-host",
+          "description": "Websocket server host. If set \"=\" value, take the value from **host** property.",
+          "sourceRange": {
+            "start": {
+              "line": 85,
+              "column": 6
+            },
+            "end": {
+              "line": 88,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "ws-port",
+          "description": "Websocket server port. Cannot be the same value as **port** property.",
+          "sourceRange": {
+            "start": {
+              "line": 93,
+              "column": 6
+            },
+            "end": {
+              "line": 96,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "ws-root",
+          "description": "Websocket root. If set \"=\" value, take the value from **host** property.",
+          "sourceRange": {
+            "start": {
+              "line": 101,
+              "column": 6
+            },
+            "end": {
+              "line": 104,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "ws-transmission-key",
+          "description": "Websocket transmission key.",
+          "sourceRange": {
+            "start": {
+              "line": 109,
+              "column": 6
+            },
+            "end": {
+              "line": 112,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "on-login-failed",
+          "description": "Name of the event to be fired defined in **on-login-failed**.",
+          "sourceRange": {
+            "start": {
+              "line": 119,
+              "column": 6
+            },
+            "end": {
+              "line": 122,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "on-login-ok",
+          "description": "Name of the event to be fired defined in **on-login-ok**.",
+          "sourceRange": {
+            "start": {
+              "line": 128,
+              "column": 6
+            },
+            "end": {
+              "line": 131,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "on-logout-failed",
+          "description": "Name of the event to be fired defined in **on-logout-failed**.",
+          "sourceRange": {
+            "start": {
+              "line": 137,
+              "column": 6
+            },
+            "end": {
+              "line": 140,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "on-logout-ok",
+          "description": "Name of the event to be fired defined in **on-logout-ok**.",
+          "sourceRange": {
+            "start": {
+              "line": 146,
+              "column": 6
+            },
+            "end": {
+              "line": 149,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "on-ws-open",
+          "description": "Name of the event to be fired defined in **on-ws-open**.",
+          "sourceRange": {
+            "start": {
+              "line": 155,
+              "column": 6
+            },
+            "end": {
+              "line": 158,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "on-ws-message",
+          "description": "Name of the event to be fired defined in **on-ws-message**.",
+          "sourceRange": {
+            "start": {
+              "line": 164,
+              "column": 6
+            },
+            "end": {
+              "line": 167,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "on-ws-error",
+          "description": "Name of the event to be fired defined in **on-ws-error**.",
+          "sourceRange": {
+            "start": {
+              "line": 173,
+              "column": 6
+            },
+            "end": {
+              "line": 176,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "on-ws-close",
+          "description": "Name of the event to be fired defined in **on-ws-close**.",
+          "sourceRange": {
+            "start": {
+              "line": 182,
+              "column": 6
+            },
+            "end": {
+              "line": 185,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "on-login-failed",
+          "description": "Fire an event with the name defined here.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "on-login-ok",
+          "description": "Fire an event with the name defined here.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "on-logout-ok",
+          "description": "Fire an event with the name defined here.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "on-ws-close",
+          "description": "Fire an event with the name defined here.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "on-ws-error",
+          "description": "Fire an event with the name defined here.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "on-ws-message",
+          "description": "Fire an event with the name defined here.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "on-ws-open",
+          "description": "Fire an event with the name defined here.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "syn-mormotcli",
+      "mixins": [
+        "synCommonsMixin",
+        "SynCommonsMixin"
+      ]
+    }
+  ],
+  "mixins": [
+    {
+      "description": "`syncommons`\nHelper class.",
+      "summary": "",
+      "path": "syn-commons.js",
+      "properties": [],
+      "methods": [
+        {
+          "name": "Utf8Encode",
+          "description": "Encode a string to UTF8.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 153,
+              "column": 4
+            },
+            "end": {
+              "line": 167,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "strUni",
+              "type": "string",
+              "description": "String to encode."
+            }
+          ],
+          "return": {
+            "type": "*",
+            "desc": "Return the string in UTF8."
+          }
+        },
+        {
+          "name": "Crc32Add",
+          "description": "CRC32 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 175,
+              "column": 4
+            },
+            "end": {
+              "line": 177,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "crc"
+            },
+            {
+              "name": "c"
+            }
+          ],
+          "return": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "crc32",
+          "description": "CRC32 routine.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 185,
+              "column": 4
+            },
+            "end": {
+              "line": 206,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "str",
+              "type": "sring",
+              "description": "String to apply the CRC32 algorithm."
+            },
+            {
+              "name": "crc",
+              "description": "Initial CRC or none."
+            }
+          ],
+          "return": {
+            "type": "number",
+            "desc": "CRC32 value."
+          }
+        },
+        {
+          "name": "sha256hash",
+          "description": "Hash string using SHA256",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 216,
+              "column": 4
+            },
+            "end": {
+              "line": 298,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "msg",
+              "type": "string",
+              "description": "Message to be hashed"
+            },
+            {
+              "name": "utf8encode",
+              "type": "boolean",
+              "description": "Encode in UTF8 ?"
+            }
+          ],
+          "return": {
+            "type": "*"
+          }
+        },
+        {
+          "name": "Sha256Ch",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 307,
+              "column": 4
+            },
+            "end": {
+              "line": 309,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            },
+            {
+              "name": "y"
+            },
+            {
+              "name": "z"
+            }
+          ],
+          "return": {
+            "type": "number"
+          }
+        }
+      ],
+      "staticMethods": [
+        {
+          "name": "JsonToUpdateSet",
+          "description": "Convert a JSON object to record update definition.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 70,
+              "column": 4
+            },
+            "end": {
+              "line": 78,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "oJson",
+              "type": "object",
+              "description": "JSON object to be converted."
+            }
+          ],
+          "return": {
+            "type": "string",
+            "desc": "Return the setname=...,set=... URL parameter for mORMot request."
+          }
+        },
+        {
+          "name": "JsonToUpdateWhere",
+          "description": "Convert a JSON object to record update condition.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 85,
+              "column": 4
+            },
+            "end": {
+              "line": 93,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "oJson",
+              "type": "object",
+              "description": "JSON object to be converted."
+            }
+          ],
+          "return": {
+            "type": "string",
+            "desc": "Return the wherename=...,where=... URL parameter for mORMot request."
+          }
+        },
+        {
+          "name": "JsonToUrl",
+          "description": "Convert JSON object to URL encoded parameters.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 100,
+              "column": 4
+            },
+            "end": {
+              "line": 107,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "oJson",
+              "type": "object",
+              "description": "JSON object to be converted."
+            }
+          ],
+          "return": {
+            "type": "string",
+            "desc": "Return the field JSON=value JSON encode URL parameters."
+          }
+        },
+        {
+          "name": "mORMotNowTime",
+          "description": "Return a date and time in mORMot format.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 113,
+              "column": 4
+            },
+            "end": {
+              "line": 146,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "Sha256Maj",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 318,
+              "column": 4
+            },
+            "end": {
+              "line": 320,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            },
+            {
+              "name": "y"
+            },
+            {
+              "name": "z"
+            }
+          ],
+          "return": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "Sha256Sigma0",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 327,
+              "column": 4
+            },
+            "end": {
+              "line": 329,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            }
+          ],
+          "return": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "Sha256Sigma1",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 336,
+              "column": 4
+            },
+            "end": {
+              "line": 338,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            }
+          ],
+          "return": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "Sha256sigma0",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 345,
+              "column": 4
+            },
+            "end": {
+              "line": 347,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            }
+          ],
+          "return": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "Sha256sigma1",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 354,
+              "column": 4
+            },
+            "end": {
+              "line": 356,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "x"
+            }
+          ],
+          "return": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "Sha256toHexStr",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 363,
+              "column": 4
+            },
+            "end": {
+              "line": 372,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "n"
+            }
+          ],
+          "return": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Sha256ROTR",
+          "description": "SHA256 support.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 380,
+              "column": 4
+            },
+            "end": {
+              "line": 382,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "n"
+            },
+            {
+              "name": "x"
+            }
+          ],
+          "return": {
+            "type": "number"
+          }
+        }
+      ],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 383,
+          "column": 4
+        }
+      },
+      "privacy": "public",
+      "name": "SynCommonsMixin",
+      "attributes": [],
+      "events": [],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": []
+    }
+  ]
+}
