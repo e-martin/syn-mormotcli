@@ -1,1 +1,8 @@
 /node_modules/
+jsdoc.conf
+package-lock.json
+polymer.json
+publish
+rollup.config.js
+.idea/
+*.tgz
