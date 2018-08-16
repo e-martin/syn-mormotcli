@@ -13,5 +13,16 @@
   },
   "devDependencies": {
     "wct-browser-legacy": "^1.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/emartin/syn-mormotcli.git"
+  },
+  "keywords": ["polymer","mormot","client"],
+  "author": "Esteban Martin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emartin/syn-mormotcli/issues"
+  },
+  "homepage": "https://github.com/emartin/syn-mormotcli"
 }
