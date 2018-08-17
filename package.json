@@ -4,21 +4,24 @@
   "description": "Webcomponent mORMot client for mORMot HTTP server (http://synopse.info)",
   "main": "syn-mormotcli.js",
   "dependencies": {
-    "@polymer/app-localize-behavior": "^3.0.0-pre.21",
-    "@polymer/iron-component-page": "^3.0.0-pre.21",
-    "@polymer/iron-demo-helpers": "^3.0.0-pre.21",
     "@polymer/polymer": "^3.0.0",
-    "@webcomponents/webcomponentsjs": "^2.0.4",
-    "npm": "^6.3.0"
+    "npm": "^6.4.0"
   },
   "devDependencies": {
+    "@polymer/iron-component-page": "^3.0.0-pre.21",
+    "@polymer/iron-demo-helpers": "^3.0.0-pre.21",
+    "@webcomponents/webcomponentsjs": "^2.0.4",
     "wct-browser-legacy": "^1.0.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/emartin/syn-mormotcli.git"
   },
-  "keywords": ["polymer","mormot","client"],
+  "keywords": [
+    "polymer",
+    "mormot",
+    "client"
+  ],
   "author": "Esteban Martin",
   "license": "ISC",
   "bugs": {
