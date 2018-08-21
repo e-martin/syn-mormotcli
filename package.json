@@ -1,6 +1,6 @@
 {
   "name": "syn-mormotcli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Webcomponent mORMot client for mORMot HTTP server (http://synopse.info)",
   "main": "syn-mormotcli.js",
   "dependencies": {
