@@ -87,6 +87,14 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
         value: ''
       },
       /**
+       * Websocket name, default is **synopsejson**.
+       * @type {string}
+       */
+      wsName: {
+        type: String,
+        value: 'synopsejson'
+      },
+      /**
        * Websocket server port. Cannot be the same value as **port** property.
        * @type {string}
        */
@@ -99,14 +107,6 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
        * @type {string}
        */
       wsRoot: {
-        type: String,
-        value: ''
-      },
-      /**
-       * Websocket transmission key.
-       * @type {string}
-       */
-      wsTransmissionKey: {
         type: String,
         value: ''
       },
@@ -549,6 +549,25 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
     })
   }
 
+  /**
+   * Enable bidirectional websocket communication.
+   */
+  webSocketsEnabled() {
+    if (this._websocket !== null) {
+      this._websocket.onclose = () => {};
+      if (this._websocket.readyState === WebSocket.OPEN) {
+        this._websocket.close();
+      }
+      this._websocket = null;
+    }
+    this._websocket = new WebSocket('ws://'+this.wsHost+ (typeof this.wsPort === 'number') ? ':'+this.wsPort : '' +'/'+
+                                    this.wsRoot,this.wsName);
+    this._websocket.onopen = this._handleOnWSOpen;
+    this._websocket.onclose = this._handleOnWSClose;
+    this._websocket.onerror = this._handleOnWSError;
+    this._websocket.onmessage = this._handleOnWSMessage;
+  }
+
   // internal methods
 
   /**
@@ -778,6 +797,7 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
     this._sessionData = null;
     this._sessionTickCountOffset = 0;
     this._lastResponse = null;
+    this._websocket = null;
   }
 
   connectedCallback(){
