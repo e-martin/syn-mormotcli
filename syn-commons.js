@@ -11,7 +11,7 @@ let SynCommonsMixin = (superClass) =>
    * @mixinClass
    * @polymer
    */
-  class extends superClass {
+  class SynCommons extends superClass {
     // lifecycle methods
     constructor() {
       super();
@@ -305,7 +305,7 @@ let SynCommonsMixin = (superClass) =>
      * @param z
      * @return {number}
      */
-    Sha256Ch(x, y, z) {
+    static Sha256Ch(x, y, z) {
       return (x & y) ^ (~x & z);
     }
 

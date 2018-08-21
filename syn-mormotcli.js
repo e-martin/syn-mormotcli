@@ -25,7 +25,6 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
           display: block;
         }
       </style>
-      <h2>host: [[host]]</h2>
     `;
   }
 
