@@ -92,7 +92,7 @@
         test('mORMot request on the element works', (done) => {
           // Create a test fixture
           const element = fixture('BasicTestFixture');
-          element.mORMotRequest('timestamp', SynMormotcli.POST_HTTP_VERB, null, null).then((data) => {
+          element.mORMotRequest('timestamp',SynMormotcli.POST_HTTP_VERB, null, null).then((data) => {
             assert.notEqual(data, '');
             done();
           });

@@ -71,12 +71,20 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
         value: 'root'
       },
       /**
-       * Compose the URL based on sll, host and port properties.
+       * Compose the URL based on ssl, host and port properties.
        * @type {string}
        */
       baseURL: {
         type: String,
         computed: 'computeBaseURL(ssl, host, port)'
+      },
+      /**
+       * Compose the URL based on ws, host and port properties.
+       * @type {string}
+       */
+      wsBaseURL: {
+        type: String,
+        computed: 'computeWsBaseURL(wsHost, wsPort)'
       },
       /**
        * Websocket server host. If set "=" value, take the value from **host** property.
@@ -260,11 +268,11 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
       this._password = this.sha256hash(this._salt+this._password);
     }
     this._sessionTickCountOffset = new Date().getTime();
-    return this.mORMotRequest('timestamp',SynMormotcli.POST_HTTP_VERB,null).
+    return this.mORMotRequest('timestamp',SynMormotcli.POST_HTTP_VERB,null,null,false).
       then((data) => {
         let timestamp = parseInt(data, 10);
         this._serverTimeStampOffset = timestamp - SynMormotcli.mORMotNowTime();
-        return this.mORMotRequest('Auth',SynMormotcli.GET_HTTP_VERB,null,{UserName: this._userName}).
+        return this.mORMotRequest('Auth',SynMormotcli.GET_HTTP_VERB,null,{UserName: this._userName},false).
           then((data) => {
             //create client nonce
             let clientNonce, s, d = new Date();
@@ -299,7 +307,7 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
               Password: this.sha256hash(this.rootModel + data.result + clientNonce + this._userName + this._password),
               ClientNonce: clientNonce
             };
-            return this.mORMotRequest('Auth',SynMormotcli.GET_HTTP_VERB,null,oData).
+            return this.mORMotRequest('Auth',SynMormotcli.GET_HTTP_VERB,null,oData,false).
               then((data) => {
                 let i = data.result.indexOf("+");
                 this._sessionID = parseInt(data.result.slice(0, i), 10);
@@ -374,6 +382,34 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
     }
 
     return this.httpRequest(this.baseURL+sNewURL,sVerb,oHeaders,oParamsOrBody);
+  }
+
+  /**
+   * WebSocket mORMot HTTP request.
+   * @param {string} sURL Interface service, method service, ORM CRUD.
+   * @param {string} sVerb GET,POST,PUT,DELETE.
+   * @param {Object} oHeaders Headers declaration in a JSON object.
+   * @param {Object} oParamsOrBody Parameters declaration (GET method) or body in a JSON object.
+   * @return {Promise<Response>} Return a promise.
+   */
+  mORMotRequestWS(sURL, sVerb, oHeaders, oParamsOrBody, bSign) {
+    let sParameters = '',
+      sNewURL;
+
+    if ([SynMormotcli.GET_HTTP_VERB,SynMormotcli.HEAD_HTTP_VERB].indexOf(sVerb) !== -1) {
+      sParameters = SynMormotcli.JsonToUrl(oParamsOrBody);
+      if (sParameters !== '') {
+        sParameters = '?'+sParameters;
+      }
+      oParamsOrBody = null;
+    }
+    if (bSign) {
+      sNewURL = this.signURL(this.wsRoot+'/'+sURL+sParameters);
+    } else {
+      sNewURL = this.wsRoot+'/'+sURL+(sParameters !== '' ? sParameters : '');
+    }
+
+    return this.httpRequest(this.wsBaseURL+sNewURL,sVerb,oHeaders,oParamsOrBody);
   }
 
   /**
@@ -560,12 +596,28 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
       }
       this._websocket = null;
     }
-    this._websocket = new WebSocket('ws://'+this.wsHost+ (typeof this.wsPort === 'number') ? ':'+this.wsPort : '' +'/'+
-                                    this.wsRoot,this.wsName);
-    this._websocket.onopen = this._handleOnWSOpen;
-    this._websocket.onclose = this._handleOnWSClose;
-    this._websocket.onerror = this._handleOnWSError;
-    this._websocket.onmessage = this._handleOnWSMessage;
+    let sPort = (this.wsPort) && (this.wsPort !== '') ? ':'+this.wsPort : '';
+    this._websocket = new WebSocket('ws://'+this.wsHost+sPort+'/'+this.wsRoot,this.wsName);
+    this._websocket.onopen = this._handleOnWSOpen();
+    this._websocket.onclose = this._handleOnWSClose();
+    this._websocket.onerror = this._handleOnWSError();
+    this._websocket.onmessage = this._handleOnWSMessage();
+    this._websocket.open();
+    this._websocket.send(this.wsName);
+  }
+
+  wsInvokeService(sEndPoint, oParams, oHeaders) {
+    return this.mORMotRequestWS(sEndPoint,SynMormotcli.POST_HTTP_VERB,oHeaders,oParams,false).
+    then((data) => {
+      if ((typeof data === 'object') && (typeof data.result !== 'undefined')) {
+        return data.result;
+      } else {
+        return data;
+      }
+    }).
+    catch((error) => {
+      return Promise.reject(error);
+    })
   }
 
   // internal methods
@@ -729,7 +781,7 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
   }
 
   /**
-   * Computed property
+   * URL computed property
    * @param {boolean} ssl use SSL ?
    * @param {string} host server IP or host name
    * @param {string} port server port
@@ -742,6 +794,19 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
           baseURL = baseURL.slice(0, 4)+'s'+baseURL.slice(4);
       }
       return baseURL;
+  }
+
+  /**
+   * Websocket URL Computed property
+   * @param {boolean} ssl use SSL ?
+   * @param {string} host server IP or host name
+   * @param {string} port server port
+   * @param {string} rootModel root for the model
+   * @return {string} return the base URL: http://host:port/rootModel/ or https://host:port/rootModel
+   */
+  computeWsBaseURL(host,port) {
+    let wsBaseURL = 'http://'+host+':'+port+'/';
+    return wsBaseURL;
   }
 
   // getter and setter methods
