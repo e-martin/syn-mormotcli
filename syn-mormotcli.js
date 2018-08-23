@@ -588,7 +588,7 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
   /**
    * Enable bidirectional websocket communication.
    */
-  webSocketsEnabled() {
+  wsEnabled() {
     if (this._websocket !== null) {
       this._websocket.onclose = () => {};
       if (this._websocket.readyState === WebSocket.OPEN) {
@@ -598,12 +598,18 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
     }
     let sPort = (this.wsPort) && (this.wsPort !== '') ? ':'+this.wsPort : '';
     this._websocket = new WebSocket('ws://'+this.wsHost+sPort+'/'+this.wsRoot,this.wsName);
-    this._websocket.onopen = this._handleOnWSOpen();
-    this._websocket.onclose = this._handleOnWSClose();
-    this._websocket.onerror = this._handleOnWSError();
-    this._websocket.onmessage = this._handleOnWSMessage();
-    this._websocket.open();
-    this._websocket.send(this.wsName);
+    this._websocket.onopen = (event) => {
+      this._handleOnWSOpen(event);
+    };
+    this._websocket.onclose = (event) => {
+      this._handleOnWSClose(event);
+    };
+    this._websocket.onerror = (event) => {
+      this._handleOnWSError(event);
+    };
+    this._websocket.onmessage = (event) => {
+      this._handleOnWSMessage(event);
+    };
   }
 
   wsInvokeService(sEndPoint, oParams, oHeaders) {
@@ -618,6 +624,16 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
     catch((error) => {
       return Promise.reject(error);
     })
+  }
+
+  /**
+   * Send websocket message.
+   * @param {string} sMessage Message to be sent.
+   */
+  wsSend(sMessage) {
+    if (this._websocket.readyState===WebSocket.OPEN) {
+      this._websocket.send(sMessage);
+    }
   }
 
   // internal methods
