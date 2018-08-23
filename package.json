@@ -5,7 +5,7 @@
   "main": "syn-mormotcli.js",
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "fetch-with-proxy": "^1.1.0",
+    "fetch-with-proxy": "^1.1.0"
   },
   "devDependencies": {
     "@polymer/iron-component-page": "^3.0.0-pre.21",
