@@ -1,11 +1,10 @@
 {
   "name": "syn-mormotcli",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Webcomponent mORMot client for mORMot HTTP server (http://synopse.info)",
   "main": "syn-mormotcli.js",
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
-    "fetch-with-proxy": "^1.1.0"
+    "@polymer/polymer": "^3.0.0"
   },
   "devDependencies": {
     "@polymer/iron-component-page": "^3.0.0-pre.21",
