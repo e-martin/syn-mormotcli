@@ -483,6 +483,7 @@ export class SynMormotcli extends synCommonsMixin(PolymerElement) {
     let sEndPoint = sTable;
 
     sEndPoint = sEndPoint+'?where='+encodeURIComponent(sWhere);
+    sEndPoint = sEndPoint+'?'+SynMormotcli.JsonToUpdateSet(oData)+'&'+SynMormotcli.JsonToUpdateWhere(oWhere);
 
     return this.mORMotRequest(sEndPoint,SynMormotcli.DELETE_HTTP_VERB,null,null,true).
     then((data) => {

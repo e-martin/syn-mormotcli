@@ -25,13 +25,16 @@
           <syn-mormotcli
               host="localhost"
               port="8888"
-              ssl="false"
-              user-auth="true"
+              ssl
+              user-auth
               root-model="root"
               on-login-ok="demoLoginOk"
               on-login-failed="demoLoginFailed"
               on-logout-ok="demoLogoutOk"
               on-logout-failed="demoLogoutFailed"
+              ws-host="localhost"
+              ws-port="8889"
+              ws-root="ws"
               on-ws-open="demoWSOpen"
               on-ws-close="demoWSClose"
               on-ws-error="demoWSError"
@@ -174,7 +177,7 @@
             // update record
             element.sqlRecordUpdate('AuthUser',3,{DisplayName: 'User1'}).
             then((result) => {
-              console.log(result); //->'' (if not return data is enabled in mORMot server
+              console.log(result); //->'' if not return data is enabled in mORMot server
             }).
             catch((error) => {
               console.log(error); //-> {"errorCode":400,"errorText":"Bad Request"}
@@ -183,7 +186,7 @@
             // update record with where clause
             element.sqlRecordUpdateWhere('AuthUser',{LogonName: '"UserNew'+sDate+'"'},{DisplayName:'"UserNewWhere"'}).
             then((result) => {
-              console.log(result); //->'' (if not return data is enabled in mORMot server
+              console.log(result); //->'' if not return data is enabled in mORMot server
             }).
             catch((error) => {
               console.log(error); //-> {"errorCode":400,"errorText":"Bad Request"}
