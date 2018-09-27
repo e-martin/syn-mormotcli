@@ -4,12 +4,12 @@
   "description": "Webcomponent mORMot client for mORMot HTTP server (http://synopse.info)",
   "main": "syn-mormotcli.js",
   "dependencies": {
-    "@polymer/polymer": "^3.0.0"
+    "@polymer/polymer": "^3.0.5"
   },
   "devDependencies": {
-    "@polymer/iron-component-page": "^3.0.0-pre.21",
-    "@polymer/iron-demo-helpers": "^3.0.0-pre.21",
-    "@webcomponents/webcomponentsjs": "^2.0.4",
+    "@polymer/iron-component-page": "^4.0.1",
+    "@polymer/iron-demo-helpers": "^3.0.2",
+    "@webcomponents/webcomponentsjs": "^2.1.3",
     "wct-browser-legacy": "^1.0.0"
   },
   "repository": {
